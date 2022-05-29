@@ -57,3 +57,33 @@ var.test(sebelum, sesudah)
 t.test(sebelum, sesudah, mu = 0, alternative = "two.sided"
        , var.equal = TRUE)
 ```
+Berikut adalah hasil run dari script
+![image](https://user-images.githubusercontent.com/73051874/170871719-531e836d-8d27-4d1c-ab70-b939cec2a03a.png)
+
+
+# No 2
+Diketahui bahwa mobil dikemudikan rata-rata lebih dari 20.000 kilometer per tahun.
+Untuk menguji klaim ini, 100 pemilik mobil yang dipilih secara acak diminta untuk
+mencatat jarak yang mereka tempuh. Jika sampel acak menunjukkan rata-rata
+23.500 kilometer dan standar deviasi 3900 kilometer.
+
+```r
+zsum.test(mean.x = 23500, sigma.x = 3900, n.x = 100,
+          alternative = "greater", mu = 20000,
+          conf.level = 0.95)
+```
+
+# 2A
+Setuju, karena kesimpulan dari uji z menolak H0, sehingga mobil dikemudikan rata-rata lebih dari 20000 kilometer per tahun
+
+# 2B
+Output dari z test adalah, hipotesis alternatif alternative hypothesis: true mean is greater than 20000 atau H1 diterima sehingga klaim benar. 
+
+# 2C
+P-value dari uji tes z adalah 2.2e-16 atau mendekati 0, dari hasil p-value tersebut hipotesis awal dapat ditolak dan H1 diterima.
+
+
+# No 3
+
+
+
