@@ -24,6 +24,36 @@ n = 9
 Data Penelitian
 
 # 1A
-```r
+Carilah Standar Deviasi dari data selisih pasangan pengamatan tabel
+diatas
 
+```r
+dif = data$sesudah - data$sebelum
+cat("Standart Deviasi selisih pengamatan = ")
+dev = sd(dif)
+dev
+```
+
+# 1B
+carilah nilai t (p-value)
+
+```r
+p = 0
+xbar = mean(dif)
+stat = ((xbar - p)/(dev/sqrt(n)))
+value = 2 * pt(-abs(stat), df = n-1)
+value
+```
+
+# 1C 
+tentukanlah apakah terdapat pengaruh yang signifikan secara statistika
+dalam hal kadar saturasi oksigen , sebelum dan sesudah melakukan
+aktivitas 𝐴 jika diketahui tingkat signifikansi 𝛼 = 5% serta H0 : “tidak ada
+pengaruh yang signifikan secara statistika dalam hal kadar saturasi
+oksigen , sebelum dan sesudah melakukan aktivitas 𝐴”
+
+```r
+var.test(sebelum, sesudah)
+t.test(sebelum, sesudah, mu = 0, alternative = "two.sided"
+       , var.equal = TRUE)
 ```
