@@ -146,12 +146,10 @@ H0 : Tidak ada perbedaan panjang antara ketiga spesies atau rata-rata panjangnya
 sama
 
 ```r
-myFile <- read.table(url("https://rstatisticsandresearch.weebly.com/uploads/1/0/2/6/1026585/onewayanova.txt"))
-dim(myFile)
-head(myFile)
-attach(myFile)
+myFile <- read.delim(file.choose())
+
 myFile$Group <- as.factor(myFile$Group)
-myFile$Group = factor(myFile$Group, labels = c("grup1", "grup2", "grup3"))
+myFile$Group = factor(myFile$Group,labels = c("grup1", "grup2", "grup3"))
 
 class(myFile$Group)
 ```
@@ -177,14 +175,19 @@ qqline(grup3$Length)
 ```
 
 berdasarkan plot kuantil normal di atas, tidak ditemukan outlier utama pada homogenitas varians
+![image](https://user-images.githubusercontent.com/73051874/170880059-1ec5efb4-d991-4510-9575-65f5dface82e.png)
+
 
 # 4B
 carilah atau periksalah Homogeneity of variances nya , Berapa nilai p yang
 didapatkan? , Apa hipotesis dan kesimpulan yang dapat diambil ?
 
 ```r
-barlett.test(Length~Group, data = myFile)
+bartlett.test(Length~Group, data = myFile)
 ```
+
+![image](https://user-images.githubusercontent.com/73051874/170880170-0ecd2411-d607-4748-978e-4fc5829dbf9e.png)
+
 
 # 4C 
 Untuk uji ANOVA (satu arah), buatlah model linier dengan Panjang versus
@@ -194,6 +197,8 @@ Grup dan beri nama model tersebut model 1.
 model1 = lm(Length~Group, data = myFile)
 anova(model1)
 ```
+
+![image](https://user-images.githubusercontent.com/73051874/170880222-1ff79266-35a2-48fd-85a7-97fff371444c.png)
 
 # 4D
 nilai p adalah 0.0013 dimana kurang dari 0.005, sehingga h0 ditolak
@@ -212,8 +217,76 @@ ggplot(myFile, aes(x = Group, y = Length)) +
   scale_x_discrete() + xlab("Group") + ylab("Length")
 ```
 
+![image](https://user-images.githubusercontent.com/73051874/170880245-c70b704a-9228-4220-b25d-330d42b6354a.png)
+
 
 # No 5
+Data yang digunakan merupakan hasil eksperimen yang dilakukan untuk mengetahui pengaruh suhu operasi (100˚C, 125˚C dan 150˚C) dan tiga jenis kaca pelat muka (A, B dan C) pada keluaran cahaya tabung osiloskop. Percobaan dilakukan sebanyak 27 kali dan didapat data sebagai berikut: Data Hasil Eksperimen. Dengan data tersebut:
 
+```r
+library(readr)
+library(multcompView)
+library(dplyr)
+library(ggplot2)
 
+gtl <- read.csv(file.choose())
+```
 
+# 5A
+Buatlah plot sederhana untuk visualisasi data
+
+```r
+qplot(x = Temp, y = Light, geom = "point", data = gtl) + 
+  facet_grid(.~Glass, labeller = label_both)
+```
+
+![image](https://user-images.githubusercontent.com/73051874/170880686-5d91a474-4bcb-4901-ba2b-8e39982f4ff4.png)
+
+# 5B
+Lakukan uji ANOVA dua arah
+
+```r
+gtl$Glass <- as.factor(gtl$Glass)
+gtl$Temp_Factor <- as.factor(gtl$Temp)
+str(gt)
+
+anova <- aov(Light ~ Glass*Temp_Factor, data = gtl)
+summary(anova)
+```
+
+![image](https://user-images.githubusercontent.com/73051874/170880880-06ec0971-4d25-4307-b801-27e313b0b796.png)
+
+# 5C
+Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya untuk setiap perlakuan (kombinasi kaca pelat muka dan suhu operasi)
+
+```r
+data_sumarry <- group_by(gtl, Glass, Temp) %>%
+  summarise(mean=mean(Light), sd=sd(Light)) %>%
+  arrange(desc(mean))
+print(data_sumarry)
+```
+
+![image](https://user-images.githubusercontent.com/73051874/170881114-7b476f49-6e2e-46c2-8ba2-0ce142268e90.png)
+
+# 5D
+Lakukan uji Tukey
+
+```r
+print("tukey test : ")
+tukey <- TukeyHSD(anova)
+print(tukey)
+```
+
+![image](https://user-images.githubusercontent.com/73051874/170881268-a9b95701-c735-4395-b98b-1e234cb55f47.png)
+
+![image](https://user-images.githubusercontent.com/73051874/170881286-61a8af21-e595-4a5c-b95c-b257112efd9a.png)
+
+# 5E
+Gunakan compact letter display untuk menunjukkan perbedaan signifikan antara uji Anova dan uji Tukey
+
+```r
+tukey.cld <- multcompLetters4(anova, tukey)
+print(tukey.cld)
+```
+
+![image](https://user-images.githubusercontent.com/73051874/170881384-1351ba69-00c4-4455-a053-44562286140d.png)
