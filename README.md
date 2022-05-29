@@ -1,1 +1,3 @@
-# P2_Probstat_A_5025201060
+Nama | NRP
+---------- | ----------
+Maheswara Danendra Satriananda | 5025201060
